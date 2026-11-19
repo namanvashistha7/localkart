@@ -1,0 +1,6 @@
+{
+  "name": "LocalKart — Your Neighbourhood Shopping Platform",
+  "description": "Digital local-shopping and product-discovery marketplace for Dehradun, Uttarakhand, connecting college students and residents with nearby kirana, stationery, and retail stores.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

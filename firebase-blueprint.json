@@ -1,0 +1,618 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated user profile linked to Google Sign-In account.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "description": "Firebase Auth UID of the user.",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Display name from Google account or user input.",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Verified Gmail / Google account email address.",
+          "maxLength": 200
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "Optional Google profile avatar URL.",
+          "maxLength": 500
+        },
+        "phone": {
+          "type": "string",
+          "description": "Indian contact phone number.",
+          "maxLength": 30
+        },
+        "locality": {
+          "type": "string",
+          "description": "Selected Dehradun locality.",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "role": {
+          "type": "string",
+          "description": "Self-selected portal role (customer or retailer).",
+          "enum": ["customer", "retailer"]
+        },
+        "associatedStoreId": {
+          "type": "string",
+          "description": "Optional store ID for retailer accounts.",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when profile was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when profile was last updated."
+        }
+      },
+      "required": ["uid", "name", "email", "locality", "role", "createdAt", "updatedAt"]
+    },
+    "Store": {
+      "title": "Store",
+      "description": "Participating Dehradun neighbourhood retail store.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerUid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "ownerName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 30
+        },
+        "locality": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "fullAddress": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 250
+        },
+        "landmark": {
+          "type": "string",
+          "maxLength": 120
+        },
+        "pincode": {
+          "type": "string",
+          "maxLength": 12
+        },
+        "rating": {
+          "type": "number"
+        },
+        "reviewCount": {
+          "type": "number"
+        },
+        "openingHours": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "pending_approval", "suspended"]
+        },
+        "verified": {
+          "type": "boolean"
+        },
+        "categories": {
+          "type": "array"
+        },
+        "image": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id", "ownerUid", "name", "ownerName", "phone", "locality",
+        "fullAddress", "openingHours", "status", "verified", "categories",
+        "createdAt", "updatedAt"
+      ]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Master product catalog entry.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "createdByUid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "brand": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "category": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 600
+        },
+        "image": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 60
+        },
+        "mrp": {
+          "type": "number"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "createdByUid", "name", "brand", "category", "unit", "mrp", "createdAt"]
+    },
+    "StoreListing": {
+      "title": "StoreListing",
+      "description": "Store-specific pricing and stock availability for a product.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "storeId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "productId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "ownerUid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "price": {
+          "type": "number"
+        },
+        "stockStatus": {
+          "type": "string",
+          "enum": ["in_stock", "limited", "out_of_stock"]
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 200
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["id", "storeId", "productId", "ownerUid", "price", "stockStatus", "updatedAt"]
+    },
+    "MarketplacePurchaseRequest": {
+      "title": "MarketplacePurchaseRequest",
+      "description": "Purchase reservation linking customer and local store.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "referenceNumber": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 40
+        },
+        "customerId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "customerName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "customerPhone": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 30
+        },
+        "customerLocality": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "storeId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "storeOwnerUid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "storeName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "itemSummary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "totalAmount": {
+          "type": "number"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["submitted", "accepted", "ready_for_pickup", "completed", "cancelled"]
+        },
+        "pickupNotes": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "preferredPickupTime": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "retailerRemarks": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "rating": {
+          "type": "number"
+        },
+        "reviewText": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "id", "referenceNumber", "customerId", "customerName", "customerPhone",
+        "customerLocality", "storeId", "storeOwnerUid", "storeName",
+        "itemSummary", "totalAmount", "status", "createdAt", "updatedAt"
+      ]
+    },
+    "StoreReview": {
+      "title": "StoreReview",
+      "description": "Customer review left on a store profile.",
+      "type": "object",
+      "properties": {
+        "storeId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "authorUid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "customerName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "rating": {
+          "type": "number"
+        },
+        "comment": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["storeId", "authorUid", "customerName", "rating", "comment", "createdAt"]
+    },
+    "UserPurchaseRequest": {
+      "title": "UserPurchaseRequest",
+      "description": "A local store pickup reservation submitted by a signed-in user.",
+      "type": "object",
+      "properties": {
+        "referenceNumber": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 40
+        },
+        "customerId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "customerName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "customerPhone": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 30
+        },
+        "customerLocality": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "storeId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "storeName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "totalAmount": {
+          "type": "number"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["submitted", "accepted", "ready_for_pickup", "completed", "cancelled"]
+        },
+        "itemSummary": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "pickupNotes": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "preferredPickupTime": {
+          "type": "string",
+          "maxLength": 80
+        },
+        "rating": {
+          "type": "number"
+        },
+        "reviewText": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "referenceNumber", "customerId", "customerName", "customerPhone",
+        "customerLocality", "storeId", "storeName", "totalAmount",
+        "status", "itemSummary", "createdAt", "updatedAt"
+      ]
+    },
+    "SavedBookmark": {
+      "title": "SavedBookmark",
+      "description": "Saved favourite store or product bookmark for a signed-in user.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "targetId": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "targetType": {
+          "type": "string",
+          "enum": ["store", "product"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["userId", "targetId", "targetType", "createdAt"]
+    },
+    "FeedbackMessage": {
+      "title": "FeedbackMessage",
+      "description": "User feedback or shop suggestion submitted from Help & Contact page.",
+      "type": "object",
+      "properties": {
+        "authorUid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "category": {
+          "type": "string",
+          "enum": ["customer", "retailer", "general"]
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "contact": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 120
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["authorUid", "category", "name", "contact", "message", "createdAt"]
+    },
+    "VentureConfig": {
+      "title": "VentureConfig",
+      "description": "Founder workspace scenarios, GTM milestones, and core assumptions.",
+      "type": "object",
+      "properties": {
+        "docType": {
+          "type": "string",
+          "enum": ["scenarios", "milestones", "assumptions"]
+        },
+        "updatedByUid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "payload": {
+          "type": "object"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["docType", "updatedByUid", "payload", "updatedAt"]
+    },
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Platform administrator authorization record.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 200
+        }
+      },
+      "required": ["uid", "email"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user profile documents keyed by Firebase Auth UID."
+    },
+    "/users/{userId}/requests/{requestId}": {
+      "schema": { "$ref": "#/entities/UserPurchaseRequest" },
+      "description": "Purchase requests owned by a specific authenticated user."
+    },
+    "/users/{userId}/saved/{itemId}": {
+      "schema": { "$ref": "#/entities/SavedBookmark" },
+      "description": "Saved favourite stores and products for a specific authenticated user."
+    },
+    "/stores/{storeId}": {
+      "schema": { "$ref": "#/entities/Store" },
+      "description": "Local retail stores in Dehradun."
+    },
+    "/stores/{storeId}/reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/StoreReview" },
+      "description": "Customer reviews for a specific store."
+    },
+    "/products/{productId}": {
+      "schema": { "$ref": "#/entities/Product" },
+      "description": "Master product catalog."
+    },
+    "/listings/{listingId}": {
+      "schema": { "$ref": "#/entities/StoreListing" },
+      "description": "Store-level pricing and inventory status."
+    },
+    "/purchaseRequests/{requestId}": {
+      "schema": { "$ref": "#/entities/MarketplacePurchaseRequest" },
+      "description": "Shared purchase requests connecting customers and store owners."
+    },
+    "/feedback/{feedbackId}": {
+      "schema": { "$ref": "#/entities/FeedbackMessage" },
+      "description": "Support inquiries and shop recommendations."
+    },
+    "/ventureData/{docId}": {
+      "schema": { "$ref": "#/entities/VentureConfig" },
+      "description": "Founder workspace scenarios, GTM milestones, and core assumptions."
+    },
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/AdminRecord" },
+      "description": "Trusted administrator directory."
+    }
+  }
+}
